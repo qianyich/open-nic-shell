@@ -17,6 +17,7 @@
 # *************************************************************************
 proc _do_impl {jobs {strategies ""}} {
     if {![llength $strategies]} {
+        create_run -flow {Vivado IDR Flow 2021} -parent_run synth_1 impl_1
         launch_runs impl_1 -to_step write_bitstream -jobs $jobs
         wait_on_run impl_1
     } else {
@@ -394,8 +395,14 @@ read_xdc ${build_dir}/run_params.xdc
 
 # Implement design
 if {$impl} {
-    update_compile_order -fileset sources_1
-    _do_impl $jobs {"Vivado Implementation Defaults"}
+    if {[string equal $board "au280"]} {
+        update_compile_order -fileset sources_1
+        _do_impl $jobs {}
+    } else {
+        update_compile_order -fileset sources_1
+        #_do_impl $jobs {"Vivado Implementation Defaults"}
+        _do_impl $jobs {"Performance_Retiming"}
+    }
 }
 
 if {$post_impl} {
