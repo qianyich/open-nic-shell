@@ -34,6 +34,16 @@ set_property -dict {
     CONFIG.axibar_notranslate {false}
     CONFIG.vdm_en {1}
     CONFIG.xlnx_ref_board {AU280}
+    CONFIG.pf0_base_class_menu_qdma {Network_controller}
+    CONFIG.pf0_class_code_base_qdma {02}
+    CONFIG.pf0_class_code_sub_qdma {80}
+    CONFIG.pf0_sub_class_interface_menu_qdma {Other_network_controller}
+    CONFIG.pf0_class_code_qdma {028000}
+    CONFIG.pf1_base_class_menu_qdma {Network_controller}
+    CONFIG.pf1_class_code_base_qdma {02}
+    CONFIG.pf1_class_code_sub_qdma {80}
+    CONFIG.pf1_sub_class_interface_menu_qdma {Other_network_controller}
+    CONFIG.pf1_class_code_qdma {028000}
 } [get_ips $qdma]
 
 set_property CONFIG.tl_pf_enable_reg $num_phys_func [get_ips $qdma]

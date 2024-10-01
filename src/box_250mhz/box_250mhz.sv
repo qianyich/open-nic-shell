@@ -83,6 +83,15 @@ module box_250mhz #(
   output                         box_rst_done,
 
   input                          axil_aclk,
+  `ifdef __au55n__
+    input                          ref_clk_100mhz,
+  `elsif __au55c__
+    input                          ref_clk_100mhz,
+  `elsif __au50__
+    input                          ref_clk_100mhz,
+  `elsif __au280__
+    input                          ref_clk_100mhz,      
+  `endif
   input                          axis_aclk
 );
 
