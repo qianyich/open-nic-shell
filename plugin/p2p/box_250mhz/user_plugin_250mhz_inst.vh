@@ -90,8 +90,8 @@ p2p_250mhz #(
   .mod_rstn                         (mod_rstn[0]),
   .mod_rst_done                     (mod_rst_done[0]),
 
-// For AU55N, AU55C, AU50, and AU280, we generate 100MHz reference clock which is needed when HBM IP is instantiated 
-// in user-defined logic.  
+// For AU55N, AU55C, AU50, and AU280, we generate 100MHz reference clock which is needed when HBM IP is instantiated
+// in user-defined logic.
 // Temperature related outputs can be added to route to CMS
 
 `ifdef __au55n__
