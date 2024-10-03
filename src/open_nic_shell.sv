@@ -2636,16 +2636,6 @@ axi_5to2_interconnect_to_sys_mem axi_interconnect_to_sys_mem_inst(
     .box_rst_done (box_250mhz_rst_done),
 
     .axil_aclk    (axil_aclk),
-
-    `ifdef __au55n__
-      .ref_clk_100mhz                   (ref_clk_100mhz),
-    `elsif __au55c__
-      .ref_clk_100mhz                   (ref_clk_100mhz),
-    `elsif __au50__
-      .ref_clk_100mhz                   (ref_clk_100mhz),
-    `elsif __au280__
-      .ref_clk_100mhz                   (ref_clk_100mhz),  
-    `endif
     .axis_aclk    (axis_aclk)
   );
 
