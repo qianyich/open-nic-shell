@@ -25,7 +25,7 @@ proc _do_impl {jobs {strategies ""}} {
         for {set i 1} {$i < [llength $strategies]} {incr i 1} {
             set r impl_[expr $i + 1]
             set s [lindex $strategies $i]
-            create_run $r -flow {Vivado Implementation 2020} -parent_run synth_1 -strategy "$s"
+            create_run $r -flow {Vivado Implementation 2023} -parent_run synth_1 -strategy "$s"
             lappend impl_runs $r
         }
         launch_runs $impl_runs -to_step write_bitstream -jobs $jobs
@@ -33,14 +33,6 @@ proc _do_impl {jobs {strategies ""}} {
             wait_on_run $r
         }
     }
-}
-
-
-proc _do_impl_idr {jobs} {
-    create_run impl_2 -flow {Vivado IDR Flow 2021} -parent_run synth_1
-    current_run [get_runs impl_2]
-    launch_runs impl_2 -to_step write_bitstream -jobs $jobs
-    wait_on_run impl_2
 }
 
 proc _do_post_impl {build_dir top impl_run {zynq_family 0}} {
@@ -231,6 +223,11 @@ if {![file exists ${ip_build_dir}/manage_ip/]} {
 # Run synthesis for each IP
 set ip_dict [dict create]
 dict for {module module_dir} $module_dict {
+    if {[string equal $module mem_ctrl]} {
+        set module_dir ${module_dir}/${board}
+        puts "DEBUG: The current module is mem_ctrl, and the directory is ${module_dir}"
+    }
+
     set ip_tcl_dir ${module_dir}/vivado_ip
 
     # Check the existence of "$ip_tcl_dir" and "${ip_tcl_dir}/vivado_ip.tcl"
@@ -402,14 +399,10 @@ read_xdc ${build_dir}/run_params.xdc
 
 # Implement design
 if {$impl} {
-    if {[string equal $board "au280"]} {
-        update_compile_order -fileset sources_1
-        _do_impl_idr $jobs
-    } else {
-        update_compile_order -fileset sources_1
-        #_do_impl $jobs {"Vivado Implementation Defaults"}
-        _do_impl $jobs {"Performance_Retiming"}
-    }
+    update_compile_order -fileset sources_1
+    #_do_impl $jobs {"Vivado Implementation Defaults"}
+    # _do_impl $jobs {"Performance_Retiming"}
+    _do_impl $jobs {"Performance_Retiming" "Performance_Explore" "Performance_ExplorePostRoutePhysOpt" "Performance_ExtraTimingOpt" "Performance_RefinePlacement" "Performance_NetDelay_high" "Performance_NetDelay_low" "Congestion_SpreadLogic_high"}
 }
 
 if {$post_impl} {
